@@ -7,17 +7,26 @@ class App extends Component {
     this.state = {
       user: {},
       isLoading: true,
+      username: "TheBigH50",
     };
+
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   getUser() {
     //fetching coderwars user data
-    fetch("https://www.codewars.com/api/v1/users/TheBigH50")
+    fetch(`https://www.codewars.com/api/v1/users/${this.state.username}`)
       .then((response) => response.json())
       .then((user) => {
         this.setState({ user, isLoading: false });
       })
       .catch((error) => console.error(error));
+  }
+
+  handleSearch(event) {
+    event.preventDefault();
+
+    this.getUser();
   }
 
   componentDidMount() {
@@ -32,12 +41,22 @@ class App extends Component {
         <div className="App">
           <div className="App-Header">
             <h1>Hello World!</h1>
+            {/*Form field for codewars username search*/}
+            <form onSubmit={this.handleSearch}>
+              <label htmlFor="username">Codewars Username:</label>
+              <input type="text"
+              value={this.state.username}
+              onChange={(event) =>
+              this.setState({username: event.target.value})
+              } />
+              <button type="submit">Search</button>
+              </form>
             {/*Display name, username, rank, score */}
             <div>
               <h2>{this.state.user.username}</h2>
               <p>{this.state.user.name}</p>
-              <p>{this.state.user.rank}</p>
-              <p>{this.state.user.score}</p>
+              <p>{this.state.user.honor}</p>
+              <p>{this.state.user.ranks.overall.name}</p>
             </div>
           </div>
         </div>
